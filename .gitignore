@@ -1,0 +1,20 @@
+/target/*
+
+
+# Maven generated file
+target
+*.versionsBackup
+*.releaseBackup
+release.properties
+
+# Eclipse generated files
+.classpath
+.projecttmp.*
+.project
+.pydevproject
+bin
+.settings
+
+# Intellij generated files
+*.iml
+.idea

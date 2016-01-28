@@ -5,14 +5,12 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>User Registration Form</title>
-	<link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-	<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
+	<jsp:include page="../fragments/staticFiles.jsp"/>
 </head>
 
 <body>
-
+	<jsp:include page="../fragments/bodyHeader.jsp"/>
  	<div class="generic-container">
 	<div class="well lead">User Registration Form</div>
  	<form:form method="POST" modelAttribute="user" class="form-horizontal">
@@ -74,5 +72,6 @@
 		</div>
 	</form:form>
 	</div>
+	<jsp:include page="../fragments/footer.jsp"/>
 </body>
 </html>

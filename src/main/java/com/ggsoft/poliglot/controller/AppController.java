@@ -2,6 +2,7 @@ package com.ggsoft.poliglot.controller;
 
 import java.util.List;
 
+import com.ggsoft.poliglot.sparqldao.SPARQLDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -21,47 +22,46 @@ import com.ggsoft.poliglot.service.WordService;
 
 public class AppController {
 
-	@Autowired
-	WordService wordService;
+    @Autowired
+    WordService wordService;
 
-	@Autowired
-	LanguageService langService;
+    @Autowired
+    LanguageService langService;
 
-	@Autowired
-	MeaningService meaningService;
+    @Autowired
+    MeaningService meaningService;
 
-	@Autowired
-	MessageSource messageSource;
+    @Autowired
+    MessageSource messageSource;
 
-	// For proper exception handling
-	@ExceptionHandler(Exception.class)
-	public void handleExceptions(Exception anExc) {
-		anExc.printStackTrace(); // do something better than this ;)
-	}
-
-
-	/**
-	 * This method will list all existing languages.
-	 */
-	@RequestMapping(value = { "/", "/listlanguages" }, method = RequestMethod.GET)
-	public String listLanguages(ModelMap model) {
-
-		List<Language> langs = langService.findAllLanguages();
-		model.addAttribute("languages", langs);
-		return "languages/langslist";
-	}
+    // For proper exception handling
+    @ExceptionHandler(Exception.class)
+    public void handleExceptions(Exception anExc) {
+        anExc.printStackTrace(); // do something better than this ;)
+    }
 
 
-	/**
-	 * This method will provide the medium to add a new Word.
-	 */
-	@RequestMapping(value = { "/newlanguage" }, method = RequestMethod.GET)
-	public String newLanguage(ModelMap model) {
-		Language lang = new Language();
-		model.addAttribute("language", lang);
-		model.addAttribute("edit", false);
-		return "languages/langregistration";
-	}
+    /**
+     * Starting page.
+     */
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String welcome(ModelMap model) {
+
+        return "welcome";
+    }
+
+
+    /**
+     * This method will list all existing languages.
+     */
+    @RequestMapping(value = { "/listlanguages"}, method = RequestMethod.GET)
+    public String listLanguages(ModelMap model) {
+
+        List<Language> langs = langService.findAllLanguages();
+        model.addAttribute("languages", langs);
+        return "languages/langslist";
+    }
+
 
 
 }

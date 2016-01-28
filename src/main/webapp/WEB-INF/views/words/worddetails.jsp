@@ -6,21 +6,17 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <title>Words List</title>
-<link href="<c:url value='/static/css/bootstrap.css' />"
-	rel="stylesheet"></link>
-<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-</head>
+<jsp:include page="../fragments/staticFiles.jsp"/>
 
 <body>
+    <jsp:include page="../fragments/bodyHeader.jsp"/>
 	<div class="generic-container">
-
+        <div class="well lead">Word details</div>
 		<div class="panel panel-default">
 			<!-- Default panel contents -->
-			<div class="panel-heading">
-				<span class="lead">Word </span>
-			</div>
+
 			<table class="table table-hover">
 				<tr>
 					<td><c:out value="${currentWord.content}" /></td>
@@ -114,5 +110,6 @@
 
 		</div>
 	</div>
+	<jsp:include page="../fragments/footer.jsp"/>
 </body>
 </html>

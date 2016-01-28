@@ -139,6 +139,7 @@ public class Meaning {
 	}
 
 	@Override
+
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -151,6 +152,11 @@ public class Meaning {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (explanation == null){
+			if (other.explanation !=null)
+				return false;
+		}else if (!explanation.equals(other.explanation))
 			return false;
 		return true;
 	}

@@ -3,18 +3,18 @@
 <html>
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Words List</title>
-	<link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-	<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
+	<title>Languages List</title>
+	<jsp:include page="../fragments/staticFiles.jsp"/>
 </head>
 
 <body>
+
+    <jsp:include page="../fragments/bodyHeader.jsp"/>
 	<div class="generic-container">
+	    <div class="well lead">List of languages</div>
 		<div class="panel panel-default">
 			  <!-- Default panel contents -->
-		  	<div class="panel-heading"><span class="lead">List of languages </span></div>
-			<table class="table table-hover">
+			<table class="table table-hover table-striped">
 	    		<thead>
 		      		<tr>
 				        <th>Language</th>

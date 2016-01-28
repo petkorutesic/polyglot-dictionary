@@ -79,10 +79,9 @@
 <body>
 	<jsp:include page="../fragments/bodyHeader.jsp"/>
 	<div class="generic-container">
-		<div class="well lead">Word insert Form</div>
-		<form:form method="POST" modelAttribute="currentWord"
+		<div class="well lead">Search word from wiktionary</div>
+		<form:form method="POST" modelAttribute="searchWordSPARQL"
 			class="form-horizontal">
-			<form:input type="hidden" path="id" id="id" />
 
 			<div class="row">
 				<div class="form-group col-md-12">
@@ -109,34 +108,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="col-md-3 control-lable" for="timeCreation">Time</label>
-					<div class="col-md-7">
-						<form:input type="text" path="timeCreation" id="timeCreation" readonly="true"
-							class="form-control input-sm" />
-						<div class="has-error">
-							<form:errors path="content" class="help-inline" />
-						</div>
-
-					</div>
-				</div>
-			</div>
-
 
 			<div class="row">
 				<div class="form-actions floatRight">
-					<c:choose>
-						<c:when test="${edit}">
-							<input type="submit" value="Update"
-								class="btn btn-primary btn-sm" /> or <a
-								href="<c:url value='/wordslist' />">Cancel</a>
-						</c:when>
-						<c:otherwise>
-							<input type="submit" value="Save" class="btn btn-primary btn-sm" /> or <a
-								href="<c:url value='/wordslist' />">Cancel</a>
-						</c:otherwise>
-					</c:choose>
+					<input type="submit" value="Search" class="btn btn-primary btn-sm" />
 				</div>
 			</div>
 		</form:form>

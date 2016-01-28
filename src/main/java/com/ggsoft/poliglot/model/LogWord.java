@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="LOG_WORD", uniqueConstraints = {
@@ -28,9 +29,15 @@ public class  LogWord{
 
 	@Column(name="TIME_VISIT", columnDefinition="DATETIME", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timeWisit;
+	private Date timeVisit;
 
-	public Integer getId() {
+    @NotNull
+    @Column(name="ACTIVE" , nullable = false)
+	private Integer active;
+
+
+
+    public Integer getId() {
 		return id;
 	}
 
@@ -46,14 +53,20 @@ public class  LogWord{
 		this.word = word;
 	}
 
-	public Date getTimeWisit() {
-		return timeWisit;
+	public Date getTimeVisit() {
+		return timeVisit;
 	}
 
-	public void setTimeWisit(Date timeWisit) {
-		this.timeWisit = timeWisit;
+	public void setTimeVisit(Date timeWisit) {
+		this.timeVisit = timeWisit;
 	}
-	
 
+    public Integer getActive() {
+        return active;
+    }
+
+    public void setActive(Integer active) {
+        this.active = active;
+    }
 	
 }

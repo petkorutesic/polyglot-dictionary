@@ -1,5 +1,6 @@
 package com.ggsoft.poliglot.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -49,9 +50,14 @@ public class  Word{
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="word")
 	@JsonIgnore
 	private Set<Meaning> wordMeanings;
-	/**
-	 * @return the id
-	 */
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="word")
+    @JsonIgnore
+    private Set<LogWord> wordLogs;
+
+    /**
+     * @return the id
+     */
 	public Integer getId() {
 		return id;
 	}
@@ -101,7 +107,21 @@ public class  Word{
 	public void setWordMeanings(Set<Meaning> wordMeanings) {
 		this.wordMeanings = wordMeanings;
 	}
-	
+
+    public Set<LogWord> getWordLogs() {
+        return wordLogs;
+    }
+
+    public void setWordLogs(Set<LogWord> wordLogs) {
+        this.wordLogs = wordLogs;
+    }
+
+	public void addMeaning(Meaning meaning){
+		if (this.wordMeanings == null)
+			this.wordMeanings= new HashSet<Meaning>();
+		this.wordMeanings.add(meaning);
+
+	}
 
 	@Override
 	public int hashCode() {
@@ -136,7 +156,7 @@ public class  Word{
 	@Override
 	public String toString() {
 		return "Word [id=" + id + ", content=" + content + ", timeCreation=" + timeCreation + ", language=" + language
-				+ ", wordMeanings=" + wordMeanings + "]";
+				+  "]";
 	}
 
 

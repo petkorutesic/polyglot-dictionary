@@ -91,6 +91,7 @@ create table log_word (
    id bigint not null auto_increment, 
    time_visit DATETIME not null,
    word_id bigint not null,
+   active int,
    primary key (id),
    constraint fk_log_word_word foreign key (word_id) references word (id),
    unique key uq_time_word (word_id, time_visit)

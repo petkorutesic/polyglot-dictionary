@@ -1,10 +1,15 @@
 package com.ggsoft.poliglot.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.ggsoft.poliglot.dto.WordSearchDTO;
+import com.ggsoft.poliglot.service.*;
+import com.ggsoft.poliglot.sparqlservice.SPARQLService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +31,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.ggsoft.poliglot.model.Language;
 import com.ggsoft.poliglot.model.Word;
-import com.ggsoft.poliglot.service.LanguageService;
-import com.ggsoft.poliglot.service.MeaningService;
-import com.ggsoft.poliglot.service.WordLinkService;
-import com.ggsoft.poliglot.service.WordService;
 
 @Controller
 @SessionAttributes("currentWord")
 public class WordController {
 
-	public static final Logger logger = Logger.getLogger(WordController.class);
+	private static final Logger logger = Logger.getLogger(WordController.class);
 
 	@Autowired
 	WordService wordService;
@@ -52,7 +53,11 @@ public class WordController {
 	@Autowired
 	MessageSource messageSource;
 
-	// For proper exception handling
+    @Autowired
+	SPARQLService sparqlService;
+
+
+    // For proper exception handling
 	@ExceptionHandler(Exception.class)
 	public void handleExceptions(Exception anExc) {
 		anExc.printStackTrace(); // do something better than this ;)
@@ -78,7 +83,9 @@ public class WordController {
 		return "words/wordslist";
 	}
 
-	// get list of words for auto completion
+    /**
+     * This method provides information for the sake of auto completion
+     */
 	@RequestMapping(value = "/words/searchword_list", method = RequestMethod.GET)
 	public @ResponseBody List<Word> getSearchWordList(@RequestParam("term") String query) {
 		//it must be the name term it's default for source in java script 
@@ -86,6 +93,8 @@ public class WordController {
 
 		return wordList;
 	}
+
+
 
 	@RequestMapping(value = { "/words/words-inlang-{lanId}" }, method = RequestMethod.GET)
 	public String listLanguageWords(@PathVariable String lanId, ModelMap model) {
@@ -109,21 +118,24 @@ public class WordController {
 
 	@RequestMapping(value = { "/words/find" }, method = RequestMethod.GET)
 	public String initFindForm(ModelMap model) {
-		model.addAttribute("currentWord", new Word());
+		model.addAttribute("searchWord", new WordSearchDTO());
+		Map<String, String> searchModels = new HashMap<String, String>();
+
+		searchModels.put("F", "Simple search");
+		searchModels.put("D", "Search by dates");
+		searchModels.put("V", "Search by number of visits");
+
+		model.addAttribute("searchModels", searchModels);
+
 		return "words/wordfind";
 	}
 
 	@RequestMapping(value = { "/words" })
-	public String processFindForm(Word currentWord, BindingResult result, ModelMap model) {
-		// allow parameterless GET request for /owners to return all records
-		if (currentWord.getContent() == null) {
-			currentWord.setContent(""); // empty string signifies broadest
-										// possible
-			// search
-		}
+	public String processFindForm(WordSearchDTO searchWord, BindingResult result, ModelMap model) {
 
-		// find owners by last name
-		List<Word> results = this.wordService.findByWord(currentWord.getContent());
+
+		// find words by their content
+		List<Word> results = this.wordService.findWordsGeneral(searchWord);
 		for (Word k : results) {
 			System.out.println(k.getContent() + "\n");
 		}
@@ -133,7 +145,7 @@ public class WordController {
 			return "redirect:/words/find";
 		} else if (results.size() == 1) {
 			// 1 word found
-			currentWord = results.iterator().next();
+			Word currentWord = results.iterator().next();
 			return "redirect:/words/" + currentWord.getId();
 		} else {
 			// multiple owners found
@@ -162,6 +174,8 @@ public class WordController {
 		model.addAttribute("edit", false);
 		return "words/wordregistration";
 	}
+
+
 
 	@RequestMapping(value = { "/words/newword-inlang-{langId}" }, method = RequestMethod.POST)
 	public String saveWordInLanguage(@ModelAttribute("currentWord") @Valid Word currentWord, BindingResult result,

@@ -6,18 +6,12 @@
 <html>
 
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Meaning Registration Form</title>
-<script type="text/javascript" src="/static/js/meanings/meaning.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<link href="<c:url value='/static/css/bootstrap.css' />"
-	rel="stylesheet"></link>
-<link href="<c:url value='/static/css/app.css' />" rel="stylesheet"></link>
-
+<jsp:include page="../fragments/staticFiles.jsp"/>
 </head>
 
 <body>
-
+	<jsp:include page="../fragments/bodyHeader.jsp"/>
 	<div class="generic-container">
 		<div class="well lead">Insert meaning for
 		<br>
@@ -84,8 +78,7 @@
 				</div>
 			</div>
 		</form:form>
-		<input type="button" onclick="count_rabbits()" value="Count rabbits!" />
-		<input type="button" id="createID" value="Create Form" onclick="makeForm()" />
 	</div>
+	<jsp:include page="../fragments/footer.jsp"/>
 </body>
 </html>

@@ -34,7 +34,7 @@ import com.ggsoft.poliglot.service.WordTypeService;
 @Controller
 @SessionAttributes(value={"newMeaning","formLanguage"})
 public class MeaningController {
-	private Logger logger = Logger.getLogger(MeaningController.class);
+	private static final Logger logger = Logger.getLogger(MeaningController.class);
 	
 	@Autowired
 	WordService wordService;

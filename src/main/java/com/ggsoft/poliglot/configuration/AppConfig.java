@@ -118,6 +118,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	}
 
+	/** Home page can be specified in this way also
+	 * Not only using Controler and mapping of "/"
+		@Override
+		public void addViewControllers(ViewControllerRegistry registry) {
+			registry.addViewController("/").setViewName("home");
+		}
+	*/
+
 	/**
 	 * Optional. It's only required when handling '.' in @PathVariables which
 	 * otherwise ignore everything after last '.' in @PathVaidables argument.

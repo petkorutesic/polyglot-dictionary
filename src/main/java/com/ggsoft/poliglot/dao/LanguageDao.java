@@ -9,6 +9,8 @@ public interface LanguageDao {
 
 	Language findById(int id);
 
+	Language findByName(String langName);
+
 	void save(Language lang);
 
 	List<Language> findAllLanguages();

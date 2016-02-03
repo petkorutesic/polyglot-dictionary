@@ -13,7 +13,7 @@ public class MeaningDto {
 	public MeaningDto() {
 	}
 
-	public MeaningDto( String explanation, Set<Usage> wordUsages) {
+	public MeaningDto( String explanation, Set<UsageDto> wordUsages) {
 		this.explanation = explanation;
 		this.wordUsages = wordUsages;
 	}
@@ -28,7 +28,7 @@ public class MeaningDto {
 
 	private Set<WordType> wordTypes = new HashSet<WordType>();
 
-	private Set<Usage> wordUsages = new HashSet<Usage>();
+	private Set<UsageDto> wordUsages = new HashSet<UsageDto>();
 
 	//Getters and setters
 
@@ -72,15 +72,20 @@ public class MeaningDto {
 		this.wordTypes = wordTypes;
 	}
 	
-	public Set<Usage> getWordUsages() {
+	public Set<UsageDto> getWordUsages() {
 		return wordUsages;
 	}
 
-	public void setWordUsages(Set<Usage> wordUsages) {
+	public void setWordUsages(Set<UsageDto> wordUsages) {
 		this.wordUsages = wordUsages;
 	}
 
+	public void addUsage(UsageDto usage) {
+		if (this.wordUsages == null)
+			this.wordUsages = new HashSet<UsageDto>();
+		this.wordUsages.add(usage);
 
+	}
 
 
 	@Override

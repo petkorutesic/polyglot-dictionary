@@ -1,0 +1,35 @@
+<div class="generic-container">
+    <div class="well lead">Found word</div>
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><span class="lead">List of found words </span></div>
+        <div class="formcontainer">
+            <ng-form  name="myForm" class="form-horizontal">
+                <section class="meaning" ng-repeat="meaning in wctrl.wordDto.wordMeanings">
+                    <label>
+                        <span>Word meaning</span>
+                        <input type="text" class="form-control input-lg" ng-model="meaning.explanation" />
+                    </label>
+
+                       <section class="usages" ng-repeat="usage in meaning.wordUsages">
+                           <label>
+                               <span>Example</span>
+                               <input type="text" class="form-control input-lg" ng-model="usage.text" />
+                           </label>
+                       </section>
+                       <button class="btn btn-primary btn-sm" ng-click="wctrl.addWordUsage(meaning)">Add example</button>
+
+                </section>
+                <button class="btn btn-primary btn-sm" ng-click="addMeaning()">Add meaning</button>
+
+                <div class="row">
+                    <div class="form-actions floatRight">
+                        <button  class="btn btn-primary btn-lg"  ng-click="wctrl.hello()" >Save</button>
+                    </div>
+                </div>
+            </ng-form>
+        </div>
+    </div>
+</div>
+
+

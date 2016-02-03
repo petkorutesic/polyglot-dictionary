@@ -22,6 +22,8 @@ public class LanguageServiceImpl implements LanguageService{
 		return dao.findById(id);
 	}
 
+	public Language findByName(String langName){ return dao.findByName(langName);};
+
 	public List<Language> findAllLanguages() {
 		return dao.findAllLanguages();
 	}

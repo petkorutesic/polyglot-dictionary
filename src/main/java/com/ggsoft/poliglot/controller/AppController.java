@@ -2,6 +2,7 @@ package com.ggsoft.poliglot.controller;
 
 import java.util.List;
 
+import com.ggsoft.poliglot.dto.WordSPARQLSearchDTO;
 import com.ggsoft.poliglot.sparqldao.SPARQLDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -60,6 +61,19 @@ public class AppController {
         List<Language> langs = langService.findAllLanguages();
         model.addAttribute("languages", langs);
         return "languages/langslist";
+    }
+
+    /**
+     * Activativation of angular submodul
+     * This method will provide the medium to search for a new Word in a chosen
+     * language using sparql queries.
+     *
+     * @return
+     */
+    @RequestMapping(value = {"/sparql"}, method = RequestMethod.GET)
+    public String getIndexOfSparqlApp( ModelMap model) {
+
+    return "sparql";
     }
 
 

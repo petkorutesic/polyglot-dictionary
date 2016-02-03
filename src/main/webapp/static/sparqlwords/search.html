@@ -1,0 +1,27 @@
+<div class="generic-container" ng-controller="WordSearchController as ctrl">
+    <div class="well lead">Search word from wiktionary</div>
+    <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="col-md-3 control-lable" for="content">Word</label>
+                <div class="col-md-7">
+                    <input type="text" ng-model="ctrl.wordSearch.content" name="content" required ng-minlength="2"
+                           class="form-control input-sm" />
+                    <div class="has-error"  ng-show="myForm.$dirty">
+                        <span ng-show="myForm.content.$error.required">This is a required field</span>
+                        <span ng-show="myForm.content.$error.minlength">Minimum length required is 2</span>
+                        <span ng-show="myForm.content.$invalid">This field is invalid </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-actions floatRight">
+                <input type="submit" value="Search" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+                <button type="button" ng-click="ctrl.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
+            </div>
+            <!--ui-sref="wordDTO"-->
+        </div>
+        </form>
+</div>

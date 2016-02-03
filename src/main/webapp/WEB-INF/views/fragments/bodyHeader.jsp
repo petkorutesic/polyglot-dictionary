@@ -26,15 +26,13 @@
                   <li><a href="<spring:url value="/words/find" htmlEscape="true" />">Find word</a></li>
                   <li><a href="<spring:url value="/listwords" htmlEscape="true" />">All words</a></li>
                   <li role="separator" class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
                   <li><a href="<spring:url value="/words/newword-inlang-" htmlEscape="true" />">Add new word</a></li>
-                  <li><a href="#">One more separated link</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Words(SPARQL)<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<spring:url value="/sparqlwords/wordsparqlsearch" htmlEscape="true" />">Add new word</a></li>
+                    <li><a href="<spring:url value="/sparql" htmlEscape="true" />">Add new word</a></li>
                 </ul>
             </li>
             <li><a href="contact">Contact</a></li>

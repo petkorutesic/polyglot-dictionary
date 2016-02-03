@@ -9,7 +9,9 @@ import com.ggsoft.poliglot.model.Meaning;
 public interface LanguageService {
 
 	Language findById(int id);
-	
+
+	Language findByName(String name);
+
 	List<Language> findAllLanguages();
 
 	void saveLanguage(Language lang);

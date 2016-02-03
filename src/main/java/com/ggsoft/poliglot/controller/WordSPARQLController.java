@@ -11,18 +11,17 @@ import com.ggsoft.poliglot.sparqlservice.SPARQLService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Controller
-@SessionAttributes("currentWord")
+@RestController
 public class WordSPARQLController {
 
 	private static final Logger logger = Logger.getLogger(WordSPARQLController.class);
@@ -52,54 +51,28 @@ public class WordSPARQLController {
 		anExc.printStackTrace(); // do something better than this ;)
 	}
 
-	@InitBinder("currentWord")
-	public void setAllowedFields(WebDataBinder dataBinder) {
-		dataBinder.setDisallowedFields(new String[] { "id" });
-	}
-
-	@ModelAttribute("formLanguage")
-	public List<Language> initializeLanguages() {
-		return langService.findAllLanguages();
-	}
-
-
-	/**
-	 * This method will provide the medium to search fors a new Word in a chosen
-	 * language using sparql queries.
-	 */
-	@RequestMapping(value = { "/sparqlwords/wordsparqlsearch" }, method = RequestMethod.GET)
-	public String newSearchWordInWiktionary( ModelMap model) {
-		// Language lang = langService.findById(Integer.parseInt(langId));
-		WordSPARQLSearchDTO nw = new WordSPARQLSearchDTO();
-
-		model.addAttribute("searchWordSPARQL", nw);
-		return "sparqlwords/wordsparqlsearch";
-	}
-
-	@RequestMapping(value = { "/sparqlwords/wordsparqlsearch" }, method = RequestMethod.POST)
-	public String searchForWordInWiktionary( WordSPARQLSearchDTO  searchWordSPARQL,
-			BindingResult result, RedirectAttributes redirectAttrs) {
-        redirectAttrs.addFlashAttribute("searchWordSPARQL", searchWordSPARQL);
-        return "redirect:/sparqlwords/listfoundsparqlwords";
-	}
-
-    @RequestMapping(value = { "/sparqlwords/listfoundsparqlwords" }, method = RequestMethod.GET)
-    public String displayWordsFromWiktionary( @ModelAttribute("searchWordSPARQL")WordSPARQLSearchDTO  searchWordSPARQL, ModelMap model) {
-        model.addAttribute("searchWordSPARQL", searchWordSPARQL);
-        return "sparqlwords/wordslistsparql";
-    }
-
 	/**
 	 * Method makes possible for angularjs to process wordDto object
 	 *
 	 * @param
 	 * @return
 	 */
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
-	public @ResponseBody WordDto index(@RequestParam("term") WordSPARQLSearchDTO searchWordSPARQL) {
-        logger.info("\n Search word: *************  \n"+ searchWordSPARQL.getContent());
-		WordDto wordW = this.sparqlService.findWordsWiktionary(searchWordSPARQL);
-		return wordW;
+
+	@RequestMapping(value = "/sparql/wordsearch", method = RequestMethod.POST)
+	public ResponseEntity<WordDto> listAllUsers(@RequestBody  WordSPARQLSearchDTO wordSearch) {
+		WordDto wordW = this.sparqlService.findWordsWiktionary(wordSearch);
+		return new ResponseEntity<WordDto>(wordW, HttpStatus.OK);
+	}
+	/**
+	 * Method saves word from single page angular applicaton
+	 *
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "/sparql/wordsave", method = RequestMethod.POST)
+	public ResponseEntity<Integer> saveWord(@RequestBody  WordDto wordDto) {
+		Integer wordId = this.sparqlService.saveWord(wordDto);
+		return new ResponseEntity<Integer>(wordId, HttpStatus.OK);
 	}
 
 }

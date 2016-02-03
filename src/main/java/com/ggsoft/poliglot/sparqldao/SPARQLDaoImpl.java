@@ -1,21 +1,22 @@
 package com.ggsoft.poliglot.sparqldao;
 
 import com.ggsoft.poliglot.dto.MeaningDto;
+import com.ggsoft.poliglot.dto.UsageDto;
 import com.ggsoft.poliglot.dto.WordDto;
 import com.ggsoft.poliglot.dto.WordSPARQLSearchDTO;
-import com.ggsoft.poliglot.model.Meaning;
-import com.ggsoft.poliglot.model.Word;
+import com.ggsoft.poliglot.service.LanguageService;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Repository("sparqlDao")
 public class SPARQLDaoImpl implements SPARQLDao {
+
+    @Autowired
+    LanguageService langService;
+
     private static final Logger logger = Logger.getLogger(SPARQLDaoImpl.class);
 
     public WordDto findWordsWiktionary(WordSPARQLSearchDTO searchWord){
@@ -27,10 +28,10 @@ public class SPARQLDaoImpl implements SPARQLDao {
                 "SELECT ?lexword ?meaning ?example \n" +
 
                 " WHERE { \n" +
-                " ?lexword rdfs:label \"" +searchWord.getContent() +"\"@de . \n" +
-                " ?lexword lemon:sense ?sense . \n" +
+                " ?lexword rdfs:label \"" +searchWord.getContent() +"\"@en . \n" +
+                " {?lexword lemon:sense ?sense . } UNION { ?lexword terms:hasSense ?sense . } \n" +
                 " ?sense terms:hasMeaning ?meaning. \n" +
-                "  OPTIONAL {?sense terms:hasSentenceExample ?example.} \n}";
+                "  OPTIONAL{{?sense terms:hasExampleSentence ?example.} UNION  {?sense terms:hasExample ?example.}} \n}";
 
         logger.info("\n ****** Running SPRQL query ****** \n");
 
@@ -49,19 +50,37 @@ public class SPARQLDaoImpl implements SPARQLDao {
             ResultSet results = qexec.execSelect();
             while(results.hasNext()){
                 QuerySolution soln = results.nextSolution();
-                //Literal name = soln.getLiteral("x");
+                Literal meaningLiteral = soln.getLiteral("meaning");
                 MeaningDto newMeaning = new MeaningDto();
-                newMeaning.setExplanation(soln.getLiteral("meaning").getString());
+                newMeaning.setExplanation(meaningLiteral.getString());
+                newMeaning.setLanguage(langService.
+                        findByName(decodeLanguage(meaningLiteral.getLanguage())));
+
+                if(soln.getLiteral("example")!= null){
+                    UsageDto newUsage = new UsageDto(soln.getLiteral("example").toString());
+                    newMeaning.addUsage(newUsage);
+                }
                 //newMeaning.setLanguage(soln.getLiteral("meaning"));
                 foundWord.addMeaning(newMeaning);
                 logger.info(soln.getLiteral("meaning").getLanguage());
                 logger.info(soln);
             }
-        }
-        finally{
+        } finally{
             qexec.close();
         }
         return foundWord;
+    }
+
+    private String decodeLanguage(String abbreviation){
+        String langName;
+        switch (abbreviation){
+            case "en" : langName="English"; break;
+            case "fr" : langName="Français"; break;
+            case "ru" : langName="Руски"; break;
+            case "de" : langName="Deutsch"; break;
+            default:  langName="Unknown"; break;
+        }
+        return  langName;
     }
 
 

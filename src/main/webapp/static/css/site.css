@@ -7,9 +7,7 @@ and open the template in the editor.
     Created on : 06-Nov-2014, 21:55:03
     Author     : john.ralston
 */
-body {
-    padding:20px 200px;
-}
+
 .blue {
     color:blue;
 }
@@ -21,20 +19,17 @@ section section {
     margin-left:50px;
 }
 
-section.department {
+section.meaning {
     background-color:#D8D8D8;
 }
-section.department label {
+section.meaning label {
     font-size: 160%;
 }
-section.course {
+section.usage {
     background-color:#B8B8B8;
 }
-section.course label {
+section.usage label {
     font-size: 130%;
-}
-section.student {
-    background-color: #707070;
 }
 
 label {
@@ -47,6 +42,16 @@ label span {
 }
 input.short {
     width:20px;
+}
+
+.username.ng-valid {
+      background-color: lightgreen;
+  }
+  .username.ng-dirty.ng-invalid-required {
+      background-color: red;
+  }
+.username.ng-dirty.ng-invalid-minlength {
+  background-color: yellow;
 }
 
 

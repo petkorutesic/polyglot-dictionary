@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.ggsoft.poliglot.model.Language;
@@ -18,6 +19,13 @@ public class LanguageDaoImpl extends AbstractDao<Integer, Language>implements La
 		if (lang != null) {
 			Hibernate.initialize(lang.getLanguageWords());
 		}
+		return lang;
+	}
+
+	public Language findByName(String langName) {
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("lang", langName));
+		Language  lang =  (Language) criteria.list().iterator().next();
 		return lang;
 	}
 

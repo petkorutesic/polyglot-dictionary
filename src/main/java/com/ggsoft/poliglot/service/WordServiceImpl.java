@@ -35,8 +35,9 @@ public class WordServiceImpl implements WordService{
         List<Word> words = null;
         switch(wordSearch.getSearchMode()){
             case "F" : words = dao.findByWord(wordSearch.getContent());  break;
-            case "D" : words = dao.findWordsLogsByDate(wordSearch.getFromDate()); break;
-            case "N" : words = dao.findWordsLogsByNumberOfVisits(wordSearch.getNumberOfVisits()); break;
+            case "D" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+                                                    wordSearch.getUntilDate()); break;
+            case "V" : words = dao.findWordsLogsByNumberOfVisits(wordSearch.getContent(),wordSearch.getNumberOfVisits()); break;
         }
 
         return words;

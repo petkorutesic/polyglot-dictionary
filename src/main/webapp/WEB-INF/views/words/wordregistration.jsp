@@ -68,7 +68,7 @@
 			        dateFormat: 'dd/mm/yy',
 			        onSelect: function(datetext){
 			            var d = new Date(); // for now
-			            datetext=datetext+" "+d.getHours()+": "+d.getMinutes()+": "+d.getSeconds();
+			            datetext=datetext+" "+d.getHours()+": "+d.getMinutes()+":"+d.getSeconds();
 			            $('#timeCreation').val(datetext);
 			        },
 			    });
@@ -116,7 +116,7 @@
 						<form:input type="text" path="timeCreation" id="timeCreation" readonly="true"
 							class="form-control input-sm" />
 						<div class="has-error">
-							<form:errors path="content" class="help-inline" />
+							<form:errors path="timeCreation" class="help-inline" />
 						</div>
 
 					</div>

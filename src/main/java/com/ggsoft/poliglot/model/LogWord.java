@@ -1,18 +1,10 @@
 package com.ggsoft.poliglot.model;
 
-import java.util.Date;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -27,9 +19,10 @@ public class  LogWord{
 	@JoinColumn(name="WORD_ID")
 	private Word word;
 
-	@Column(name="TIME_VISIT", columnDefinition="DATETIME", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date timeVisit;
+	@Column(name="TIME_VISIT", nullable=false)
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+	private DateTime timeVisit;
 
     @NotNull
     @Column(name="ACTIVE" , nullable = false)
@@ -53,15 +46,15 @@ public class  LogWord{
 		this.word = word;
 	}
 
-	public Date getTimeVisit() {
+	public DateTime getTimeVisit() {
 		return timeVisit;
 	}
 
-	public void setTimeVisit(Date timeWisit) {
-		this.timeVisit = timeWisit;
+	public void setTimeVisit(DateTime timeVisit) {
+		this.timeVisit = timeVisit;
 	}
 
-    public Integer getActive() {
+	public Integer getActive() {
         return active;
     }
 

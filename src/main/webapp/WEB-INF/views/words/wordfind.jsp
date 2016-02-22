@@ -5,6 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
+
 <html>
 
 <head>
@@ -66,10 +67,19 @@
 			        dateFormat: 'dd/mm/yy',
 			        onSelect: function(datetext){
 			            var d = new Date(); // for now
-			            datetext=datetext+" "+d.getHours()+": "+d.getMinutes()+": "+d.getSeconds();
+			            datetext=datetext+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
 			            $('#fromDate').val(datetext);
 			        },
 			    });
+
+				$('#untilDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					onSelect: function(datetext){
+						var d = new Date(); // for now
+						datetext=datetext+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();
+						$('#untilDate').val(datetext);
+					},
+				});
 
 			});
 </script>
@@ -108,9 +118,21 @@
                         </div>
                     </div>
                 </div>
+                <div class = "row">
+					<div class="form-group col-md-12">
+						<label class="col-md-3 control-lable" for="numberOfVisits">Number or visits</label>
+						<div class="col-md-7">
+							<form:input type="date" path="numberOfVisits" id="numberOfVisits"
+								class="form-control input-sm" />
+							<div class="has-error">
+								<form:errors path="numberOfVisits" class="help-inline" />
+							</div>
+						</div>
+					</div>
+				</div>
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <label class="col-md-3 control-lable" for="fromDate">Time</label>
+                        <label class="col-md-3 control-lable" for="fromDate">Accessed from</label>
                         <div class="col-md-7">
                             <form:input type="text" path="fromDate" id="fromDate"
                                 class="form-control input-sm" />
@@ -121,11 +143,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+					<div class="form-group col-md-12">
+						<label class="col-md-3 control-lable" for="untilDate">Accessed until</label>
+						<div class="col-md-7">
+							<form:input type="text" path="untilDate" id="untilDate"
+								class="form-control input-sm" />
+							<div class="has-error">
+								<form:errors path="untilDate" class="help-inline" />
+							</div>
+
+						</div>
+					</div>
+				</div>
 
                 <div class="row">
                     <div class="form-actions floatRight">
-                        <input type="submit" value="Search" class="btn btn-primary btn-sm" /> or <a
-                            href="<c:url value='/' />">Cancel</a>
+					<input type="submit" value="Search" class="btn btn-primary btn-sm" />
                     </div>
                 </div>
 			</form:form>

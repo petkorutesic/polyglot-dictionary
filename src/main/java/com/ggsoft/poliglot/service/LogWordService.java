@@ -17,5 +17,7 @@ public interface LogWordService {
 	void updateLogWord(LogWord log);
 
 	void saveLogWord(LogWord log);
+
+	public void updateLogForWord(Word word);
 	
 }

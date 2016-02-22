@@ -1,21 +1,15 @@
 package com.ggsoft.poliglot.dao;
 
-import java.util.Date;
-import java.util.List;
-
+import com.ggsoft.poliglot.model.Word;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
-import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.type.Type;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
-import com.ggsoft.poliglot.model.Word;
+import java.util.List;
 
 
 
@@ -62,28 +56,33 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Word> findWordsLogsByDate(Date sooner) {
+	public List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("content"));
+		criteria.add(Restrictions.ilike("content", "%"+word+"%"));
         criteria.createAlias("wordLogs", "logs", JoinType.LEFT_OUTER_JOIN);
-		criteria.add(Restrictions.le("logs.timeVisit", sooner));
-		criteria.add(Restrictions.eq("logs.active", 1));
+		if (from != null)
+			criteria.add(Restrictions.ge("logs.timeVisit", from));
+		if (till != null)
+			criteria.add(Restrictions.le("logs.timeVisit", till));
 		List<Word>  words= (List<Word>) criteria.list();
 		return words;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Word> findWordsLogsByNumberOfVisits(int numOfVisits) {
-		Criteria criteria = createEntityCriteria().addOrder(Order.asc("word"));
-		criteria.createAlias("wordLogs", "logs", JoinType.LEFT_OUTER_JOIN);
-		ProjectionList pl = Projections.projectionList();
-		pl.add(Projections.sqlGroupProjection("count( *) as visit_counter",
-				"visit_counter HAVING visit_counter > "+numOfVisits, new String[]{"visit_counter"},
-				new Type[]{StandardBasicTypes.INTEGER}));
-		criteria.setProjection(pl);
-		criteria.setResultTransformer(new AliasToBeanResultTransformer(
-				Word.class));
+	public List<Word> findWordsLogsByNumberOfVisits(String word, int numOfVisits) {
 
-		List<Word>  words= (List<Word>) criteria.list();
+        String hql = "from Word w \n" +
+                    " where w.id in (select w1.id " +
+                                  " from Word as w1 inner join w1.wordLogs as l \n" +
+                                    " where w1.id = w.id " +
+                                    "group by w1.id having count(l.id) > :numOfVisits ) \n" +
+				     "and w.content like :word";
+
+        //Criteria doesnt work for complex queries
+        Query query= getSession().createQuery(hql);
+        query.setParameter("numOfVisits", (long) numOfVisits);
+        query.setParameter("word", "%" + word + "%");
+		List<Word>  words= query.list();
 		return words;
 	}
 

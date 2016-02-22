@@ -38,7 +38,7 @@ public class  Word{
 	@NotNull
 	@Column(name="TIME_CREATION" , nullable = false)
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	private DateTime timeCreation;
 
 	@NotNull

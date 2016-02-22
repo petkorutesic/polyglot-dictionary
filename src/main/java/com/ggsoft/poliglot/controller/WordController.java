@@ -1,39 +1,31 @@
 package com.ggsoft.poliglot.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
-
 import com.ggsoft.poliglot.dto.WordSearchDTO;
+import com.ggsoft.poliglot.model.Language;
+import com.ggsoft.poliglot.model.Word;
 import com.ggsoft.poliglot.service.*;
 import com.ggsoft.poliglot.sparqlservice.SPARQLService;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
-import com.ggsoft.poliglot.model.Language;
-import com.ggsoft.poliglot.model.Word;
+import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-@SessionAttributes("currentWord")
+@SessionAttributes(value={"currentWord"})
 public class WordController {
 
 	private static final Logger logger = Logger.getLogger(WordController.class);
@@ -45,16 +37,11 @@ public class WordController {
 	LanguageService langService;
 
 	@Autowired
-	MeaningService meaningService;
-
-	@Autowired
-	WordLinkService wordLinkService;
-
-	@Autowired
 	MessageSource messageSource;
 
-    @Autowired
-	SPARQLService sparqlService;
+
+	@Autowired
+	LogWordService logWordService;
 
 
     // For proper exception handling
@@ -63,14 +50,16 @@ public class WordController {
 		anExc.printStackTrace(); // do something better than this ;)
 	}
 
+//	@InitBinder("searchWord")
+//	public void initSearchWordBinder(WebDataBinder dataBinder) {
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+//		dateFormat.setLenient(false);
+//		dataBinder.registerCustomEditor(WordSearchDTO.class, "fromDate",new CustomDateEditor(dateFormat, false));
+//	}
+
 	@InitBinder("currentWord")
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields(new String[] { "id" });
-	}
-
-	@ModelAttribute("formLanguage")
-	public List<Language> initializeLanguages() {
-		return langService.findAllLanguages();
 	}
 
 	/**
@@ -111,8 +100,8 @@ public class WordController {
 
 		// Word w = wordService.findByIdComplete(wordId);
 		Word w = wordService.findByIdComplete(wordId);
-		logger.info("\n ****** Reading information for the language ****** " + w.getLanguage().getLang() + "\n");
 		model.addAttribute("currentWord", w);
+		logWordService.updateLogForWord(w);
 		return "words/worddetails";
 	}
 
@@ -131,17 +120,26 @@ public class WordController {
 	}
 
 	@RequestMapping(value = { "/words" })
-	public String processFindForm(WordSearchDTO searchWord, BindingResult result, ModelMap model) {
-
+	public String processFindForm( @ModelAttribute("searchWord") @Valid WordSearchDTO searchWord, BindingResult result, ModelMap model) {
+		if (result.hasErrors()) {
+			//Adding the same searchmodels again
+			Map<String, String> searchModels = new HashMap<String, String>();
+			searchModels.put("F", "Simple search");
+			searchModels.put("D", "Search by dates");
+			searchModels.put("V", "Search by number of visits");
+			model.addAttribute("searchModels", searchModels);
+			return "words/wordfind";
+		}
 
 		// find words by their content
 		List<Word> results = this.wordService.findWordsGeneral(searchWord);
 		for (Word k : results) {
-			System.out.println(k.getContent() + "\n");
+			logger.info(k.getContent() + "\n");
 		}
 		if (results.isEmpty()) {
 			logger.info("***************** No word found *****************\n");// no owners found
-			result.rejectValue("currentWord", "notFound", "not found");
+			logger.info("**********Search word*********" + searchWord.toString());
+			result.rejectValue("content", "notFound");
 			return "redirect:/words/find";
 		} else if (results.size() == 1) {
 			// 1 word found
@@ -169,7 +167,7 @@ public class WordController {
 			Language lang = langService.findById(Integer.parseInt(langId));
 			nw.setLanguage(lang);
 		}
-
+        model.addAttribute("formLanguage",langService.findAllLanguages());
 		model.addAttribute("currentWord", nw);
 		model.addAttribute("edit", false);
 		return "words/wordregistration";
@@ -188,9 +186,11 @@ public class WordController {
 				logger.info("Object " + error.getObjectName() + " - Field " + error.getField() + " - "
 						+ error.getDefaultMessage());
 			}
+			model.addAttribute("formLanguage",langService.findAllLanguages());
 			return "words/wordregistration";
 		}
 		wordService.saveWord(currentWord);
+
 
 		model.addAttribute("success",
 				"Word " + currentWord.getContent() + " " + currentWord.getTimeCreation() + " registered successfully");
@@ -204,7 +204,7 @@ public class WordController {
 	@RequestMapping(value = { "/words/edit-word-{wordId}" }, method = RequestMethod.GET)
 	public String editWord(@PathVariable Integer wordId, ModelMap model) {
 		Word word = wordService.findById(wordId);
-		
+        model.addAttribute("formLanguage",langService.findAllLanguages());
 		model.addAttribute("currentWord", word);
 		model.addAttribute("edit", true);
 		return "words/wordregistration";

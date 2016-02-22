@@ -1,9 +1,9 @@
 package com.ggsoft.poliglot.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import com.ggsoft.poliglot.model.Word;
+import org.joda.time.DateTime;
+
+import java.util.List;
 
 
 public interface WordDao {
@@ -14,9 +14,9 @@ public interface WordDao {
 	
 	List<Word> findByWord(String word);
 
-	List<Word> findWordsLogsByNumberOfVisits(int numOfVisits);
+	List<Word> findWordsLogsByNumberOfVisits(String word, int numOfVisits);
 
-	List<Word> findWordsLogsByDate(Date sooner);
+	List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till);
 
 	void save(Word word);
 	

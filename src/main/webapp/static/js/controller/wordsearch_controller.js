@@ -9,7 +9,7 @@ App.controller('WordSearchController', ['$scope', '$log', 'WordSearchObject',
           self.wordSearch={content:'',language:{ id: 4, lang : 'Deutsch'}};
 
 
-           self.submit = function() {
+          self.submit = function() {
              // debug;
               if(self.wordSearch.content!=''){
                   console.log('Search for word', self.wordSearch);
@@ -22,5 +22,4 @@ App.controller('WordSearchController', ['$scope', '$log', 'WordSearchObject',
               self.wordSearch={content:'',language:''};
               $scope.myForm.$setPristine(); //reset Form
           };
-
       }]);

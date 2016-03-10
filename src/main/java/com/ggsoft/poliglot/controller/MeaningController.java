@@ -78,19 +78,6 @@ public class MeaningController {
 	// Spring MVC calls method loadWordWithMeaning(...) before newMeaningOfWord is called
 
 
-
-	@RequestMapping(value = { "/meaning/edit-meaning-{meanId}" }, method = RequestMethod.GET)
-	public String editMeaning(@PathVariable Integer meanId, ModelMap model) {
-		Meaning meaning = meaningService.findById(meanId);
-		model.addAttribute("newMeaning", meaning);
-		model.addAttribute("edit", true);
-		return "meanings/meaningregistration";
-	}
-
-
-
-
-	
 	@RequestMapping(value = { "/meaning/new-meaning-forword-{wordId}" }, method = RequestMethod.GET)
 	public String newMeaningOfWord(@PathVariable Integer wordId, ModelMap model) {
 		Word w = wordService.findById(wordId);
@@ -103,9 +90,7 @@ public class MeaningController {
 		logger.info("Meaning language   "+newMeaning.getLanguage().getLang() );	
 		
 		List<WordType> possibleWordTypes = wordTypeService.findAllWordTypes();
-		
-		
-		
+
 	    model.addAttribute("newMeaning",newMeaning);  
 	    model.addAttribute("possibleWordTypes",possibleWordTypes); 
 		model.addAttribute("edit", false);
@@ -136,23 +121,29 @@ public class MeaningController {
 
 		model.addAttribute("success", "Meaning registered successfully");
 		return "redirect:/words/" + wordId;
-		
-		
 	}
-	
-	/**
-	 * This method will be called on form submission, handling POST request for
-	 * updating word in database. It also validates the word input
-	 */
-	@RequestMapping(value = { "/meaning/edit-meaning-{meanId}" }, method = RequestMethod.POST)
-	public String updateMeaning(@Valid Meaning newMeaning , BindingResult result, ModelMap model, @PathVariable String meanId) {
 
+
+
+	@RequestMapping(value = { "/meaning/edit-meaning-{meanId}" }, method = RequestMethod.GET)
+	public String editMeaning(@PathVariable Integer meanId, ModelMap model) {
+		Meaning meaning = meaningService.findById(meanId);
+		model.addAttribute("newMeaning", meaning);
+		model.addAttribute("possibleWordTypes",wordTypeService.findAllWordTypes());
+		model.addAttribute("edit", true);
+		return "meanings/meaningregistration";
+	}
+
+
+	@RequestMapping(value = { "/meaning/edit-meaning-{meanId}" }, method = RequestMethod.POST)
+	public String updateMeaning(@ModelAttribute ("newMeaning")  @Valid Meaning newMeaning , BindingResult result, ModelMap model, @PathVariable String meanId) {
 		if (result.hasErrors()) {
+			model.addAttribute("possibleWordTypes",wordTypeService.findAllWordTypes());
+			model.addAttribute("edit", true);
 			return "meanings/meaningregistration";
 		}
 
 		meaningService.updateMeaning(newMeaning);
-
 		model.addAttribute("success", "Meaning " + newMeaning.getExplanation() + " updated successfully");
 		return "redirect:/words/" + newMeaning.getWord().getId();
 	}

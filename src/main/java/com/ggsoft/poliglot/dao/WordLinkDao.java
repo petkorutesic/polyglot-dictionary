@@ -13,7 +13,7 @@ public interface WordLinkDao {
 	void save(WordLink wordLink);
 	
 	List<WordLink> findAllWordLinksOfMeaning(Meaning meaning);
-	
-	void delete(WordLink wordLink);
+
+	void deleteWordLink(WordLink wordLink);
 }
 

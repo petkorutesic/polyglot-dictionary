@@ -142,14 +142,20 @@ public class UsageController {
 		return "redirect:/words/" + wordUsage.getId();
 	}
 	
+	/*
+		Deleting usage and removing it from all meanings
+	 */
 	
-	
-	@RequestMapping(value = { "/wordusages/delete-wordusage-{usageId}" }, method = RequestMethod.GET)
-	public String deleteWordUsage(@PathVariable Integer usageId) {
+	@RequestMapping(value = { "/wordusages/delete-wordusage-{usageId}-from-meaning-{meaningId}" }, method = RequestMethod.GET)
+	public String deleteWordUsage(@PathVariable Integer usageId, @PathVariable Integer meaningId) {
 		Usage u = usageService.findById(usageId);
+		Meaning meaning = meaningService.findById(meaningId);
+		meaning.getWordUsages().remove(u);
+
+		meaningService.updateMeaning(meaning);
 		usageService.deleteUsage(u);
 		
-		return "redirect:/words/" + u.getId();
+		return "redirect:/words/" + meaning.getWord().getId();
 
 	}
 

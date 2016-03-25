@@ -9,8 +9,11 @@ import com.ggsoft.poliglot.model.WordLink;
 public interface WordLinkService {
 
 	WordLink findById(int id);
-	
-	void deleteWordLink(WordLink word);
+
+	/*
+		Delete current wordLink
+	 */
+	void deleteWordLink(WordLink wordLInk);
 
 	List<WordLink> findWordLinksOfMeaning(Meaning meaning);
 	

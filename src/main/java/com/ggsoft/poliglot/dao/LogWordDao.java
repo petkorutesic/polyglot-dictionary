@@ -10,6 +10,8 @@ public interface LogWordDao {
 
 	LogWord findById(int id);
 
+	void deleteLogsForWord(Word w);
+
 	List<LogWord> findLogsForWord(Word w);
 
 /* List<LogWord> findAllLogWords(); */

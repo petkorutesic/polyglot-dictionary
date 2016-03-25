@@ -4,6 +4,7 @@ import com.ggsoft.poliglot.model.LogWord;
 import com.ggsoft.poliglot.model.Word;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -29,6 +30,11 @@ public class LogWordDaoImpl extends AbstractDao<Integer, LogWord> implements Log
 		return logWords;
 	}
 
+	public void deleteLogsForWord(Word w){
+		String hql = "delete from LogWord where word= :wordId";
+		Query query= getSession().createQuery(hql);
+		query.setParameter("wordId", w).executeUpdate();
+	}
 
 	public void saveLogWord(LogWord logWord) {
 	    persist(logWord);

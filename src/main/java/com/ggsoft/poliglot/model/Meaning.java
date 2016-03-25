@@ -1,22 +1,10 @@
 package com.ggsoft.poliglot.model;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -56,10 +44,10 @@ public class Meaning {
     	inverseJoinColumns = { @JoinColumn(name = "WORDUSAGE_ID") })
 	private Set<Usage> wordUsages = new HashSet<Usage>();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="meaningFrom" )
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="meaningFrom")
 	private Set<WordLink> fromLinks;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="meaningTo" )
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="meaningTo")
 	private Set<WordLink> toLinks;
 	
 	//Getters and setters

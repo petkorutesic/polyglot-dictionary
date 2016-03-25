@@ -107,7 +107,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <label class="col-md-3 control-lable" for="searchMode">Language</label>
+                        <label class="col-md-3 control-lable" for="searchMode">Search Mode</label>
                         <div class="col-md-7">
                             <form:select path ="searchMode" class="form-control input-sm" >
                                 <form:options items="${searchModels}" />
@@ -118,6 +118,19 @@
                         </div>
                     </div>
                 </div>
+				<div class="row">
+					<div class="form-group col-md-12">
+						<label class="col-md-3 control-lable" for="languages">Languages</label>
+						<div class="col-md-7">
+							<form:select path="languages" items="${searchLanguages}"
+								multiple="true" itemValue="id" itemLabel="lang"
+								class="form-control input-sm" />
+							<div class="has-error">
+								<form:errors path="languages" class="help-inline" />
+							</div>
+						</div>
+					</div>
+				</div>
                 <div class = "row">
 					<div class="form-group col-md-12">
 						<label class="col-md-3 control-lable" for="numberOfVisits">Number or visits</label>

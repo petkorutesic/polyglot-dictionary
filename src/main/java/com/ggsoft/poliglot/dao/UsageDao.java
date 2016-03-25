@@ -16,7 +16,7 @@ public interface UsageDao {
 	
 	void save(Usage wordUsage);
 	
-	void delete(Usage wordUsage);
+	void deleteUsage(Usage wordUsage);
 	
 	
 }

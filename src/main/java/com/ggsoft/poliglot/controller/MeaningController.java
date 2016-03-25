@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.ggsoft.poliglot.converter.WordTypePropertyEditor;
+import com.ggsoft.poliglot.converter.FormLanguageToLanguageEditor;
 import com.ggsoft.poliglot.model.Language;
 import com.ggsoft.poliglot.model.Meaning;
 import com.ggsoft.poliglot.model.Word;
@@ -64,7 +64,7 @@ public class MeaningController {
     public void setAllowedFields(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields(new String[] {"id", "word"});
         //We are using Property editors to avoid usage of Converters
-		WordTypePropertyEditor editor = new WordTypePropertyEditor();
+		FormLanguageToLanguageEditor editor = new FormLanguageToLanguageEditor();
         context.getAutowireCapableBeanFactory().autowireBean(editor);
 		dataBinder.registerCustomEditor(WordType.class, "wordTypes", editor);
     }

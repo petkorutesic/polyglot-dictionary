@@ -124,12 +124,11 @@ public class WordLinkController {
 	
 	@RequestMapping(value = { "/wordlinks/meaning-{meaningId}/delete-wordlink-{wordLinkId}" }, method = RequestMethod.GET)
 	public String deleteWordLink(ModelMap model, @PathVariable Integer meaningId, @PathVariable Integer wordLinkId) {
-		WordLink wl = wordLinkService.findById(wordLinkId);
+        WordLink wl = wordLinkService.findById(wordLinkId);
 		wordLinkService.deleteWordLink(wl);
 		
-		Meaning fromMeaning = meaningService.findById(meaningId);		
-		model.addAttribute("fromMeaning", fromMeaning);
-		return "wordlinks/wordssearch";
+	//	Meaning fromMeaning = meaningService.findById(meaningId);
+		return "redirect:/wordlinks/meaning-" + meaningId +"/search";
 
 	}
 	

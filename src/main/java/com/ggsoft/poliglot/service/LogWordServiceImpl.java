@@ -23,6 +23,10 @@ public class LogWordServiceImpl implements LogWordService{
 		return dao.findById(id);
 	}
 
+	public void deleteLogsForWord(Word w){
+		dao.deleteLogsForWord(w);
+	}
+
 	public List<LogWord> findLogsForWord(Word w) {
 		return dao.findLogsForWord(w);
 	}

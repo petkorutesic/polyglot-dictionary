@@ -1,14 +1,17 @@
 package com.ggsoft.poliglot.controller;
 
+import com.ggsoft.poliglot.converter.FormLanguageToLanguageEditor;
 import com.ggsoft.poliglot.dto.WordSearchDTO;
 import com.ggsoft.poliglot.model.Language;
 import com.ggsoft.poliglot.model.Word;
-import com.ggsoft.poliglot.service.*;
-import com.ggsoft.poliglot.sparqlservice.SPARQLService;
+import com.ggsoft.poliglot.service.LanguageService;
+import com.ggsoft.poliglot.service.LogWordService;
+import com.ggsoft.poliglot.service.WordService;
+import com.ggsoft.poliglot.utils.ExternalWordLink;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,10 +41,12 @@ public class WordController {
 	@Autowired
 	MessageSource messageSource;
 
-
 	@Autowired
 	LogWordService logWordService;
 
+	//I use ApplicationContex because autowiring is not possible in PropertyEditors
+	@Autowired
+	private ApplicationContext context;
 
     // For proper exception handling
 	@ExceptionHandler(Exception.class)
@@ -50,12 +54,13 @@ public class WordController {
 		anExc.printStackTrace(); // do something better than this ;)
 	}
 
-//	@InitBinder("searchWord")
-//	public void initSearchWordBinder(WebDataBinder dataBinder) {
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-//		dateFormat.setLenient(false);
-//		dataBinder.registerCustomEditor(WordSearchDTO.class, "fromDate",new CustomDateEditor(dateFormat, false));
-//	}
+	@InitBinder("searchWord")
+	public void setAllowedSearchFields(WebDataBinder dataBinder) {
+		//We are using Property editors to avoid usage of Converters
+		FormLanguageToLanguageEditor editor = new FormLanguageToLanguageEditor();
+		context.getAutowireCapableBeanFactory().autowireBean(editor);
+		dataBinder.registerCustomEditor(WordSearchDTO.class, "languages", editor);
+	}
 
 	@InitBinder("currentWord")
 	public void setAllowedFields(WebDataBinder dataBinder) {
@@ -101,6 +106,8 @@ public class WordController {
 		// Word w = wordService.findByIdComplete(wordId);
 		Word w = wordService.findByIdComplete(wordId);
 		model.addAttribute("currentWord", w);
+		List<ExternalWordLink> externalLinks = wordService.findExternalLinks(w);
+		model.addAttribute("externalLinks",externalLinks);
 		logWordService.updateLogForWord(w);
 		return "words/worddetails";
 	}
@@ -115,6 +122,7 @@ public class WordController {
 		searchModels.put("V", "Search by number of visits");
 
 		model.addAttribute("searchModels", searchModels);
+		model.addAttribute("searchLanguages", langService.findAllLanguages());
 
 		return "words/wordfind";
 	}

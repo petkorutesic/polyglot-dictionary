@@ -21,12 +21,25 @@
 				<tr>
 					<td><c:out value="${currentWord.content}" /></td>
 					<th width="100"></th>
+					<td>${currentWord.language.lang}</td>
+					<td>
+						<c:if test="${! empty externalLinks}">
+							<c:forEach items="${externalLinks}" var="extLink">
+								<a href="<c:url value='${extLink.linkAddress}'/>" target="_blank">
+										${extLink.linkName}</a> &nbsp;
+							</c:forEach>
+						</c:if>
+					</td>
 					<td><a
 						href="<c:url value='/words/edit-word-${currentWord.id}' />"
 						class="btn btn-success custom-width">edit</a></td>
 					<td><a
 						href="<c:url value='/words/delete-word-${currentWord.id}' />"
 						class="btn btn-danger custom-width">delete</a></td>
+					<td><a
+                        href="<c:url value='/wordlogs/wordlogs-for-word-${currentWord.id}' />"
+                        class="btn btn-info custom-width">visits</a></td>
+
 				</tr>
 
 			</table>
@@ -97,8 +110,11 @@
 								<c:forEach items="${meaning.wordUsages}" var="wordUsage">
 									<tr>
 										<td><a
-											href="<c:url value='/wordusages/${wordUsage.id}' />">
+											href="<c:url value='https://translate.google.com/#de/en/${wordUsage.text}' />" target="_blank">
 												${wordUsage.text}</a> &nbsp;</td>
+										<td><a
+                                        	 href="<c:url value='/wordusages/delete-wordusage-${wordUsage.id}-from-meaning-${meaning.id}' />"
+                                        		class="btn btn-custom btn-danger custom-width">Delete</a> </td>
 									</tr>
 								</c:forEach>
 							</table>

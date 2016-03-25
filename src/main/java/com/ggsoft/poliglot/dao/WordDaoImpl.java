@@ -1,5 +1,6 @@
 package com.ggsoft.poliglot.dao;
 
+import com.ggsoft.poliglot.model.Language;
 import com.ggsoft.poliglot.model.Word;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -9,8 +10,9 @@ import org.hibernate.sql.JoinType;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 @Repository("wordDao")
@@ -56,7 +58,7 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till) {
+	public List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till, Set<Language> languages) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("content"));
 		criteria.add(Restrictions.ilike("content", "%"+word+"%"));
         criteria.createAlias("wordLogs", "logs", JoinType.LEFT_OUTER_JOIN);
@@ -64,6 +66,10 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 			criteria.add(Restrictions.ge("logs.timeVisit", from));
 		if (till != null)
 			criteria.add(Restrictions.le("logs.timeVisit", till));
+		//Extracting only keys because comparison can be carried out only on that level
+		if (languages != null && !languages.isEmpty())
+			criteria.add(Restrictions.in("language", languages));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Word>  words= (List<Word>) criteria.list();
 		return words;
 	}
@@ -76,7 +82,7 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
                                   " from Word as w1 inner join w1.wordLogs as l \n" +
                                     " where w1.id = w.id " +
                                     "group by w1.id having count(l.id) > :numOfVisits ) \n" +
-				     "and w.content like :word";
+				     "and w.content like :word order w.content";
 
         //Criteria doesnt work for complex queries
         Query query= getSession().createQuery(hql);

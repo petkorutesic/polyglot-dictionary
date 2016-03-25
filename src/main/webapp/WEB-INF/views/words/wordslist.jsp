@@ -28,6 +28,8 @@
 				<thead>
 					<tr>
 						<th>Word</th>
+						<th width="100">Language</th>
+						<th width="100"></th>
 						<th width="100"></th>
 						<th width="100"></th>
 					</tr>
@@ -40,8 +42,9 @@
 								</spring:url> <a href="${fn:escapeXml(wordUrl)}"> <c:out
 										value="${word.content}" />
 							</a></td>
+							<td>${word.language.lang}</td>
 							<td><a href="<c:url value='/words/${word.id}' />"
-								class="btn btn-success custom-width">meanings</a></td>
+								class="btn btn-success custom-width" target="_blank">meanings</a></td>
 							<td><a href="<c:url value='/words/edit-word-${word.id}' />"
 								class="btn btn-success custom-width">edit</a></td>
 							<td><a
@@ -52,7 +55,9 @@
 				</tbody>
 			</table>
 		</div>
-
+		<div class="panel-heading">
+			<span class="lead">${fn:length(words)} rows </span>
+		</div>
 	</div>
 	<jsp:include page="../fragments/footer.jsp"/>
 </body>

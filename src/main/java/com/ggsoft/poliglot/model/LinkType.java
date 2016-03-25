@@ -65,7 +65,13 @@ public class LinkType {
 			return false;
 		return true;
 	}
-	
 
-		
+
+	@Override
+	public String toString() {
+		return "LinkType{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

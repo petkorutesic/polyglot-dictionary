@@ -1,5 +1,6 @@
 package com.ggsoft.poliglot.dto;
 
+import com.ggsoft.poliglot.model.Language;
 import org.hibernate.annotations.Type;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -8,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * Created by info on 21.1.16..
@@ -27,6 +29,8 @@ public class WordSearchDTO {
     @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     private DateTime untilDate;
+
+    private Set<Language> languages;
 
 
 
@@ -70,6 +74,13 @@ public class WordSearchDTO {
         this.untilDate = untilDate;
     }
 
+    public Set<Language> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(Set<Language> languages) {
+        this.languages = languages;
+    }
     @Override
     public String toString() {
         return "WordSearchDTO{" +

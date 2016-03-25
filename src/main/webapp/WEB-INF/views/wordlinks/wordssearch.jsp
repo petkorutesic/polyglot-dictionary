@@ -129,7 +129,6 @@
 							<th width="100"></th>
 							<th width="100"></th>
 							<th width="100"></th>
-							<th width="100"></th>
 
 						</tr>
 					</thead>
@@ -143,14 +142,11 @@
 										href="<c:url value='/wordlinks/edit-wordlink-${link.id}' />"
 										class="btn btn-success custom-width">edit</a></td>
 									<td><a
-										href="<c:url value='/wordlinks/meaning-${link.meaningTo.id}/delete-wordlink-${link.id}' />"
+										href="<c:url value='/wordlinks/meaning-${fromMeaning.id}/delete-wordlink-${link.id}' />"
 										class="btn btn-danger custom-width">delete</a></td>
 									<td><a
 										href="<c:url value='/words/${link.meaningTo.word.id}' />">
 											${link.meaningTo.word.content}</a></td>
-									<td><a
-										href="<c:url value='/wordlinks/meaning-${link.meaningTo.id}/search' />"
-										class="btn btn-custom custom-width">Links</a></td>
 								</tr>
 								<tr>
 

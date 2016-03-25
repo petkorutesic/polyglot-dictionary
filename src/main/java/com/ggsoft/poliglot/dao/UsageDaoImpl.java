@@ -47,7 +47,7 @@ public class UsageDaoImpl extends AbstractDao<Integer, Usage> implements UsageDa
 	    persist(wordUsage);	
 	}
 	
-	public void delete(Usage wordUsage){
+	public void deleteUsage(Usage wordUsage){
 		delete(wordUsage);
 	}
 

@@ -30,8 +30,9 @@ public class WordLinkDaoImpl extends AbstractDao<Integer, WordLink> implements W
 		return wordsLinks;
 	}
 
-	public void delete(WordLink wordLink){
+	public void deleteWordLink(WordLink wordLink){
 		delete(wordLink);
+
 	}
 
 	

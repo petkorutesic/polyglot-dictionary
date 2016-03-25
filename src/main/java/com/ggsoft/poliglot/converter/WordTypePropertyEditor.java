@@ -13,7 +13,7 @@ import com.ggsoft.poliglot.service.WordTypeService;
 @Component
 public class WordTypePropertyEditor extends PropertyEditorSupport {
 
-	public static final Logger logger = Logger.getLogger(WordTypePropertyEditor.class);
+	public static final Logger logger = Logger.getLogger(FormLanguageToLanguageEditor.class);
 	@Autowired
 	WordTypeService wordTypeService;
 

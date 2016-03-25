@@ -28,7 +28,7 @@ public class UsageServiceImpl implements UsageService{
 	}
 
 	public void deleteUsage(Usage wordUsage){
-		dao.delete(wordUsage);
+		dao.deleteUsage(wordUsage);
 	}
 
 	public void saveUsage(Usage wordUsage){

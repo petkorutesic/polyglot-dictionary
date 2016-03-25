@@ -27,7 +27,7 @@ public class WordLinkServiceImpl implements WordLinkService{
 	}
 
 	public void deleteWordLink(WordLink wordLink){
-		dao.delete(wordLink);
+		dao.deleteWordLink(wordLink);
 	}
 
 	public void saveWordLink(WordLink wordLink){

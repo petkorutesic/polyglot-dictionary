@@ -12,6 +12,8 @@ public interface LogWordService {
 	
 	void deleteLogWord(LogWord log);
 
+	void deleteLogsForWord(Word w);
+
 	List<LogWord> findLogsForWord(Word w);
 
 	void updateLogWord(LogWord log);

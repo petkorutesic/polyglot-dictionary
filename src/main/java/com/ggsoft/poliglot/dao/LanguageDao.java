@@ -17,4 +17,6 @@ public interface LanguageDao {
 
 	void addMeaning(Language l, Meaning m);
 
+	Language loadFullLanguageById(int id);
+
 }

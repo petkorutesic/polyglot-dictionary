@@ -120,6 +120,10 @@ public class WordController {
 		searchModels.put("F", "Simple search");
 		searchModels.put("D", "Search by dates");
 		searchModels.put("V", "Search by number of visits");
+		searchModels.put("TLA", "According to last visit time ascending");
+		searchModels.put("TLD", "According to last visit time descending");
+		searchModels.put("TCA", "According to creation time ascending");
+		searchModels.put("TCD", "According to creation time descending");
 
 		model.addAttribute("searchModels", searchModels);
 		model.addAttribute("searchLanguages", langService.findAllLanguages());
@@ -135,6 +139,10 @@ public class WordController {
 			searchModels.put("F", "Simple search");
 			searchModels.put("D", "Search by dates");
 			searchModels.put("V", "Search by number of visits");
+			searchModels.put("TLA", "According to last visit time ascending");
+			searchModels.put("TLD", "According to last visit time descending");
+			searchModels.put("TCA", "Acccording to creation time ascending");
+			searchModels.put("TCD", "According to creation time descending");
 			model.addAttribute("searchModels", searchModels);
 			return "words/wordfind";
 		}

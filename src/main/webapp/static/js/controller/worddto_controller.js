@@ -24,7 +24,10 @@ App.controller('WordDtoController', ['$scope','$log', '$state', '$window', 'Word
                 }
                );
     };
-
+    /*
+     * A service for creating new words is called and new word is generate
+     * afterwards we are jumping to another external address.
+     */
     self.createWord = function(wordDto){
         WordDtoService.createWord(wordDto)
               .then(

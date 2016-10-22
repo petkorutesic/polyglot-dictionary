@@ -1,6 +1,7 @@
 package com.ggsoft.poliglot.dao;
 
 import com.ggsoft.poliglot.model.Language;
+import com.ggsoft.poliglot.model.SearchType;
 import com.ggsoft.poliglot.model.Word;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -40,10 +41,23 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 		return word;
 	}
 
-	public List<Word> findByWord(String word1) {
+	public List<Word> findByWord(String word1, SearchType searchType) {
 		Criteria crit = createEntityCriteria();
 		crit.add(Restrictions.ilike("content", "%"+word1+"%"));
-		crit.addOrder(Order.asc("content"));
+
+		switch (searchType){
+			case TIME_CREATE_A:
+				crit.addOrder(Order.asc("timeCreation"));
+				break;
+			case TIME_CREATE_D:
+				crit.addOrder(Order.desc("timeCreation"));
+				break;
+			case SIMPLE:
+				crit.addOrder(Order.asc("content"));
+				break;
+			default:
+				break;
+		}
 		@SuppressWarnings("unchecked")
 		List<Word>  words= (List<Word>) crit.list();
 		return words;
@@ -58,7 +72,7 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till, Set<Language> languages) {
+	public List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till, Set<Language> languages, SearchType type) {
 		Criteria criteria = createEntityCriteria().addOrder(Order.asc("content"));
 		criteria.add(Restrictions.ilike("content", "%"+word+"%"));
         criteria.createAlias("wordLogs", "logs", JoinType.LEFT_OUTER_JOIN);
@@ -69,6 +83,7 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 		//Extracting only keys because comparison can be carried out only on that level
 		if (languages != null && !languages.isEmpty())
 			criteria.add(Restrictions.in("language", languages));
+		criteria.addOrder(Order.asc("content"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		List<Word>  words= (List<Word>) criteria.list();
 		return words;
@@ -79,10 +94,10 @@ public class WordDaoImpl extends AbstractDao<Integer, Word> implements WordDao {
 
         String hql = "from Word w \n" +
                     " where w.id in (select w1.id " +
-                                  " from Word as w1 inner join w1.wordLogs as l \n" +
-                                    " where w1.id = w.id " +
-                                    "group by w1.id having count(l.id) > :numOfVisits ) \n" +
-				     "and w.content like :word order w.content";
+                                    " from Word as w1 inner join w1.wordLogs as l \n" +
+                                   // " where w1.id = l.word_id " +
+                                    " group by w1.id having count(l.id) < :numOfVisits ) \n" +
+				     " and w.content like :word order by w.content";
 
         //Criteria doesnt work for complex queries
         Query query= getSession().createQuery(hql);

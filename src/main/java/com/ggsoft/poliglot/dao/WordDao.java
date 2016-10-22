@@ -1,6 +1,7 @@
 package com.ggsoft.poliglot.dao;
 
 import com.ggsoft.poliglot.model.Language;
+import com.ggsoft.poliglot.model.SearchType;
 import com.ggsoft.poliglot.model.Word;
 import org.joda.time.DateTime;
 
@@ -14,11 +15,11 @@ public interface WordDao {
 	
 	Word findByIdComplete(int id);
 	
-	List<Word> findByWord(String word);
+	List<Word> findByWord(String word, SearchType searchType);
 
 	List<Word> findWordsLogsByNumberOfVisits(String word, int numOfVisits);
 
-	List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till, Set<Language> languages);
+	List<Word> findWordsLogsByDate(String word, DateTime from, DateTime till, Set<Language> languages, SearchType type);
 
 	void save(Word word);
 	

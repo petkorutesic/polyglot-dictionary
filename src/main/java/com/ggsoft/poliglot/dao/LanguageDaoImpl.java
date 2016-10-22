@@ -16,13 +16,19 @@ public class LanguageDaoImpl extends AbstractDao<Integer, Language>implements La
 
 	public Language findById(int id) {
 		Language lang = getByKey(id);
-		if (lang != null) {
-			Hibernate.initialize(lang.getLanguageWords());
-		}
 		return lang;
 	}
 
-	public Language findByName(String langName) {
+    public Language loadFullLanguageById(int id) {
+        Language lang = getByKey(id);
+        if (lang != null) {
+            Hibernate.initialize(lang.getLanguageWords());
+        }
+        return lang;
+    }
+
+
+    public Language findByName(String langName) {
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq("lang", langName));
 		Language  lang =  (Language) criteria.list().iterator().next();
@@ -41,7 +47,6 @@ public class LanguageDaoImpl extends AbstractDao<Integer, Language>implements La
 	}
 	
 	public void addMeaning(Language l, Meaning m){
-		Hibernate.initialize(l.getLanguageWords());
 		l.addMeaning(m);
 	}
 

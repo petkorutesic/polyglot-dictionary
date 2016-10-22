@@ -13,9 +13,6 @@ public class LinkTypeDaoImpl extends AbstractDao<Integer, LinkType> implements L
 
 	public LinkType findById(int id) {
 		LinkType type = getByKey(id);
-		if(type!=null){
-//			Hibernate.initialize(type.getSynonymsTo());
-		}
 		return type;
 	}
 

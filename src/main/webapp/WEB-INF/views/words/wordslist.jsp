@@ -27,6 +27,7 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
+						<th>Nr.</th>
 						<th>Word</th>
 						<th width="100">Language</th>
 						<th width="100"></th>
@@ -35,8 +36,9 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${words}" var="word">
+					<c:forEach items="${words}" var="word" varStatus="loop">
 						<tr>
+							<td>${loop.index+1}</td>
 							<td><spring:url value="/words/{wordId}" var="wordUrl">
 									<spring:param name="wordId" value="${word.id}" />
 								</spring:url> <a href="${fn:escapeXml(wordUrl)}"> <c:out

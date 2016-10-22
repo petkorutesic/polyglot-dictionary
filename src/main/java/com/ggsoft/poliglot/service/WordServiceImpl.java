@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ggsoft.poliglot.dto.WordSearchDTO;
+import com.ggsoft.poliglot.model.SearchType;
 import com.ggsoft.poliglot.utils.ExternalWordLink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class WordServiceImpl implements WordService{
     }
 
     public List<Word> findByWord(String type){
-        return dao.findByWord(type);
+        return dao.findByWord(type, SearchType.SIMPLE);
     }
 
     public List<Word> findAllWords() {
@@ -35,10 +36,23 @@ public class WordServiceImpl implements WordService{
     public List<Word> findWordsGeneral(WordSearchDTO wordSearch) {
         List<Word> words = null;
         switch(wordSearch.getSearchMode()){
-            case "F" : words = dao.findByWord(wordSearch.getContent());  break;
+            case "F" : words = dao.findByWord(wordSearch.getContent(), SearchType.SIMPLE);  break;
             case "D" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
-                                                    wordSearch.getUntilDate(), wordSearch.getLanguages()); break;
+                                                    wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A); break;
             case "V" : words = dao.findWordsLogsByNumberOfVisits(wordSearch.getContent(),wordSearch.getNumberOfVisits()); break;
+            case "TLA" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+                    wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A);
+                break;
+            case "TLD" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+                    wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A);
+                break;
+            case "TCA" : words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_A);
+                break;
+            case "TCD" : words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_D);
+                break;
+            default:
+                words = dao.findByWord(wordSearch.getContent(), SearchType.SIMPLE);
+                break;
         }
 
         return words;

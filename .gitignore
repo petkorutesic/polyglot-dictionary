@@ -18,3 +18,7 @@ bin
 # Intellij generated files
 *.iml
 .idea
+
+# Other files
+hs_err_pid7213.log
+replay_pid7213.log

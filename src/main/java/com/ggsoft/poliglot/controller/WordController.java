@@ -21,10 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @SessionAttributes(value={"currentWord"})
@@ -113,17 +110,14 @@ public class WordController {
 	}
 
 	@RequestMapping(value = { "/words/find" }, method = RequestMethod.GET)
-	public String initFindForm(ModelMap model) {
+	public String initFindForm(ModelMap model,Locale locale) {
 		model.addAttribute("searchWord", new WordSearchDTO());
-		Map<String, String> searchModels = new HashMap<String, String>();
+		Map<WordSearchDTO.WORD_SEARCH_MODE, String> searchModels = new HashMap<>();
 
-		searchModels.put("F", "Simple search");
-		searchModels.put("D", "Search by dates");
-		searchModels.put("V", "Search by number of visits");
-		searchModels.put("TLA", "According to last visit time ascending");
-		searchModels.put("TLD", "According to last visit time descending");
-		searchModels.put("TCA", "According to creation time ascending");
-		searchModels.put("TCD", "According to creation time descending");
+		for (WordSearchDTO.WORD_SEARCH_MODE search_mode : WordSearchDTO.WORD_SEARCH_MODE.getAllSearchModes()){
+			searchModels.put(search_mode,
+					messageSource.getMessage("Search.Mode." + search_mode.getWordSearchCode() + ".string", null, locale) );
+		}
 
 		model.addAttribute("searchModels", searchModels);
 		model.addAttribute("searchLanguages", langService.findAllLanguages());
@@ -132,17 +126,19 @@ public class WordController {
 	}
 
 	@RequestMapping(value = { "/words" })
-	public String processFindForm( @ModelAttribute("searchWord") @Valid WordSearchDTO searchWord, BindingResult result, ModelMap model) {
+	public String processFindForm( @ModelAttribute("searchWord") @Valid WordSearchDTO searchWord,
+								   BindingResult result, ModelMap model, Locale locale) {
 		if (result.hasErrors()) {
 			//Adding the same searchmodels again
-			Map<String, String> searchModels = new HashMap<String, String>();
-			searchModels.put("F", "Simple search");
-			searchModels.put("D", "Search by dates");
-			searchModels.put("V", "Search by number of visits");
-			searchModels.put("TLA", "According to last visit time ascending");
-			searchModels.put("TLD", "According to last visit time descending");
-			searchModels.put("TCA", "Acccording to creation time ascending");
-			searchModels.put("TCD", "According to creation time descending");
+		//	Map<String, String> searchModels = new HashMap<String, String>();
+			Map<WordSearchDTO.WORD_SEARCH_MODE, String> searchModels = new HashMap<>();
+
+			for (WordSearchDTO.WORD_SEARCH_MODE search_mode : WordSearchDTO.WORD_SEARCH_MODE.getAllSearchModes()){
+				searchModels.put(search_mode,
+						messageSource.getMessage("Search.Mode." + search_mode.getWordSearchCode() + ".string", null, locale) );
+			}
+
+
 			model.addAttribute("searchModels", searchModels);
 			return "words/wordfind";
 		}

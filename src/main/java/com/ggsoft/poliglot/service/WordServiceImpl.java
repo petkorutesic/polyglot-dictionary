@@ -1,6 +1,8 @@
 package com.ggsoft.poliglot.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.ggsoft.poliglot.dto.WordSearchDTO;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ggsoft.poliglot.dao.WordDao;
 import com.ggsoft.poliglot.model.Word;
-
 
 @Service("wordService")
 @Transactional
@@ -36,19 +37,31 @@ public class WordServiceImpl implements WordService{
     public List<Word> findWordsGeneral(WordSearchDTO wordSearch) {
         List<Word> words = null;
         switch(wordSearch.getSearchMode()){
-            case "F" : words = dao.findByWord(wordSearch.getContent(), SearchType.SIMPLE);  break;
-            case "D" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
-                                                    wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A); break;
-            case "V" : words = dao.findWordsLogsByNumberOfVisits(wordSearch.getContent(),wordSearch.getNumberOfVisits()); break;
-            case "TLA" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+            case SIMPLE:
+                words = dao.findByWord(wordSearch.getContent(), SearchType.SIMPLE);
+                break;
+            case DATE:
+                words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+                        wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A); break;
+            case NUM_VISIT:
+                words = dao.findWordsLogsByNumberOfVisits(wordSearch.getContent(),wordSearch.getNumberOfVisits());
+                break;
+            case NUM_VISIT_RANDOM:
+                words = dao.findWordsLogsByNumberOfVisits(wordSearch.getContent(),wordSearch.getNumberOfVisits());
+                Collections.shuffle(words);
+                break;
+            case LAST_VISIT_ASCENDING_TIME:
+                words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
                     wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A);
                 break;
-            case "TLD" : words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
+            case LAST_VISIT_DESCENDING_TIME:
+                words = dao.findWordsLogsByDate(wordSearch.getContent(), wordSearch.getFromDate(),
                     wordSearch.getUntilDate(), wordSearch.getLanguages(), SearchType.TIME_VISIT_A);
                 break;
-            case "TCA" : words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_A);
+            case TIME_CREATION_ASCENDING:
+                words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_A);
                 break;
-            case "TCD" : words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_D);
+            case TIME_CREATION_DESCENDING: words = dao.findByWord(wordSearch.getContent(), SearchType.TIME_CREATE_D);
                 break;
             default:
                 words = dao.findByWord(wordSearch.getContent(), SearchType.SIMPLE);

@@ -133,8 +133,9 @@
 								href="<c:url value='/wordslist' />">Cancel</a>
 						</c:when>
 						<c:otherwise>
-							<input type="submit" value="Save" class="btn btn-primary btn-sm" /> or <a
+							<input type="submit" value="Save" name = "wordAction" class="btn btn-primary btn-sm" /> or <a
 								href="<c:url value='/wordslist' />">Cancel</a>
+							<input type="submit" value="Search" name = "wordAction" class="btn btn-primary btn-sm" />
 						</c:otherwise>
 					</c:choose>
 				</div>

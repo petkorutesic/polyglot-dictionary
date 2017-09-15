@@ -105,6 +105,10 @@ public class WordServiceImpl implements WordService{
                 dict.setLinkName("dict.cc");
                 dict.setLinkAddress("http://www.dict.cc/?s="+word.getContent());
                 externalLinks.add(dict);
+                ExternalWordLink freedict = new ExternalWordLink();
+                freedict.setLinkName("freeDict");
+                freedict.setLinkAddress("http://de.thefreedictionary.com/"+word.getContent());
+                externalLinks.add(freedict);
             }
                 break;
             case "Italiano":
@@ -126,16 +130,20 @@ public class WordServiceImpl implements WordService{
             {
                 ExternalWordLink wiki = new ExternalWordLink();
                 wiki.setLinkName("Wiktionary");
-                wiki.setLinkAddress("https://de.wiktionary.org/wiki/"+word.getContent());
+                wiki.setLinkAddress("https://wiktionary.org/wiki/"+word.getContent());
                 externalLinks.add(wiki);
                 ExternalWordLink google = new ExternalWordLink();
                 google.setLinkName("Google");
                 google.setLinkAddress("https://translate.google.com/#en/en/"+word.getContent());
                 externalLinks.add(google);
                 ExternalWordLink dict = new ExternalWordLink();
-                dict.setLinkName("dict.cc");
-                dict.setLinkAddress("http://www.deen.dict.cc/?s="+word.getContent());
+                dict.setLinkName("Dictionary");
+                dict.setLinkAddress("http://www.dictionary.com/browse/"+word.getContent());
                 externalLinks.add(dict);
+                ExternalWordLink theFreeDict = new ExternalWordLink();
+                theFreeDict.setLinkName("TheFreeDict");
+                theFreeDict.setLinkAddress("http://www.thefreedictionary.com/"+word.getContent());
+                externalLinks.add(theFreeDict);
             }
             break;
             default:

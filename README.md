@@ -9,7 +9,7 @@ Additionally, parameters
 jdbc.username = username and jdbc.password =password in the
 file polyglot-dictionary/src/main/resources/application.properties according to
 your database credentials. Because jetty is used as testing server program can
-be run issuing commands: 
-mvn install 
+be run issuing commands: \
+mvn install \ 
 mvn jetty:run
 

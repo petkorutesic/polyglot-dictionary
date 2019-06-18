@@ -26,7 +26,7 @@ public class  Language{
 	@Column(name="TYPE",  nullable=false)
 	private String lang;
 	
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "language")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "language")
 	@JsonIgnore
 	private Set<Word> languageWords;
 	

@@ -5,11 +5,11 @@
 
 poliglot-dictionary application uses MySql database. Database with a name language has 
 to be created: \
-**mysql -u root -e "create database language"** \
+**mysql -u root -e "create database language"** 
 
 Next step is to create database tables, for this  we can use DDL queries which can be found
 in the file create-ddl-and-one_dump.sql Thus we can issue the following command: \
-mysql -u root -p language < create-ddl-and-one_dump.sql \
+**mysql -u root -p language < create-ddl-and-one_dump.sql** \
 create-ddl-and-one-dump.sql contains besides ddl statements insert queries to populate
 database with some simple data.
 

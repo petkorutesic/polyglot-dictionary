@@ -1,5 +1,29 @@
 # polyglot-dictionary
 
+Poliglog-dictionary is an application which can be used as a dictionary in which
+we can enter words or sayings and explain their meanings in different languages.
+To relate specific words in different languages we can use links between
+meanings of words. \
+
+The core of the application is implemented in Java using Spring framework to 
+implement MVC architecture. Hibernate is used as an ORM tool.\
+
+Second part of the application is using SPARQL query to get information of 
+a an arbitrarily inserted word. For this part of the applicaton we use 
+Angular platform while in the backend we still use Java.
+
+
+## Installation
+
+poliglot-dictionary application uses MySql database. Database with a name **language** has
+to be created. It can be done using the follwing command in terminal: 
+
+```
+mysql -u root -e "create database language"
+```
+Next step is to create database tables, for this  we can use DDL queries which can be found
+in the file **create-ddl-and-one_dump.sql** Thus we can issue the following command: 
+
 ```
 mysql -u root -p language < create-ddl-and-one_dump.sql 
 ```

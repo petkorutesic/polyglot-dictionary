@@ -6,11 +6,12 @@ To relate specific words in different languages we can use links between
 meanings of words. 
 
 The core of the application is implemented in Java using Spring framework to 
-implement MVC architecture. Hibernate is used as an ORM tool.
+implement MVC architecture.JSP (Java Server Pages) is a technology used to 
+implement View part of the application. Hibernate is used as an ORM tool.
 
-Second part of the application is using SPARQL query with ontop platform 
+Second part of the application is using SPARQL query with the ontop platform 
 to get information of 
-a an arbitrarily inserted word. For this part of the applicaton we use Angular
+for an arbitrarily inserted word. For this part of the applicaton we use Angular
  platform while in the backend we still use Java.
 
 

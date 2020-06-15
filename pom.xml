@@ -13,7 +13,7 @@
         <project.source.version>1.8</project.source.version>
         <project.target.version>1.8</project.target.version>
         <project.encoding>UTF-8</project.encoding>
-        <springframework.version>4.1.7.RELEASE</springframework.version>
+        <springframework.version>5.2.7.RELEASE</springframework.version>
         <hibernate.version>4.3.10.Final</hibernate.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
         <jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
